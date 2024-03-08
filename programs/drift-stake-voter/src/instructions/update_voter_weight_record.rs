@@ -55,18 +55,16 @@ pub struct UpdateVoterWeightRecord<'info> {
 
 pub fn update_voter_weight_record(ctx: Context<UpdateVoterWeightRecord>) -> Result<()> {
     let voter_weight_record = &mut ctx.accounts.voter_weight_record;
-    let insurance_fund_stake = &mut ctx.accounts.insurance_fund_stake.load_mut()?;
 
 
     let weight = get_user_token_stake(
-        insurance_fund_stake,
+        ctx.accounts.insurance_fund_stake.load()?.deref(),
         ctx.accounts.spot_market.load()?.deref(),
         ctx.accounts.insurance_fund_vault.amount,
         Clock::get()?.unix_timestamp,
     )?;
+
     msg!("Weight: {}", weight);
-
-
 
     // Setup voter_weight
     voter_weight_record.voter_weight = weight;
