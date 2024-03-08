@@ -36,7 +36,6 @@ pub struct UpdateVoterWeightRecord<'info> {
     // pub token_owner_record: UncheckedAccount<'info>,
 
     #[account(
-        mut,
         constraint = spot_market.load()?.market_index == registrar.spot_market_index,
         constraint = spot_market.load()?.mint == registrar.governing_token_mint,
     )]
@@ -46,7 +45,6 @@ pub struct UpdateVoterWeightRecord<'info> {
     )]
     pub insurance_fund_vault: Account<'info, TokenAccount>,
     #[account(
-        mut,
         constraint = insurance_fund_stake.load()?.authority == voter_weight_record.governing_token_owner.key(),
         constraint = insurance_fund_stake.load()?.market_index == registrar.spot_market_index,
         // check that this is owned by the drift program specified by the registrar
@@ -66,6 +64,9 @@ pub fn update_voter_weight_record(ctx: Context<UpdateVoterWeightRecord>) -> Resu
         ctx.accounts.insurance_fund_vault.amount,
         Clock::get()?.unix_timestamp,
     )?;
+    msg!("Weight: {}", weight);
+
+
 
     // Setup voter_weight
     voter_weight_record.voter_weight = weight;
