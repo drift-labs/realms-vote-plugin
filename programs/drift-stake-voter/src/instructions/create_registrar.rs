@@ -25,6 +25,11 @@ pub struct CreateRegistrar<'info> {
     #[account(executable)]
     pub governance_program_id: UncheckedAccount<'info>,
 
+    /// The program id of the spl-governance program the realm belongs to
+    /// CHECK: Can be any instance of spl-governance and it's not known at the compilation time
+    #[account(executable)]
+    pub drift_program_id: UncheckedAccount<'info>,
+
     /// An spl-governance Realm
     ///
     /// Realm is validated in the instruction:
@@ -49,6 +54,8 @@ pub struct CreateRegistrar<'info> {
     pub payer: Signer<'info>,
 
     pub system_program: Program<'info, System>,
+
+
 }
 
 /// Creates a new Registrar which stores Realms voter configuration for the given Realm
@@ -58,11 +65,15 @@ pub struct CreateRegistrar<'info> {
 ///
 /// max_governance_programs is used to allocate account size for the maximum number of configured spl-governance instances
 /// Note: Once Solana runtime supports account resizing the max value won't be required
-pub fn create_registrar(ctx: Context<CreateRegistrar>, _max_governance_programs: u8) -> Result<()> {
+pub fn create_registrar(ctx: Context<CreateRegistrar>, spot_market_index: u16) -> Result<()> {
     let registrar = &mut ctx.accounts.registrar;
-    registrar.governance_program_id = ctx.accounts.governance_program_id.key();
-    registrar.realm = ctx.accounts.realm.key();
-    registrar.governing_token_mint = ctx.accounts.governing_token_mint.key();
+    **registrar = Registrar {
+        governance_program_id: ctx.accounts.governance_program_id.key(),
+        realm: ctx.accounts.realm.key(),
+        governing_token_mint: ctx.accounts.governing_token_mint.key(),
+        spot_market_index: spot_market_index,
+        drift_program_id: ctx.accounts.drift_program_id.key(), 
+    };
 
     // Verify that realm_authority is the expected authority of the Realm
     // and that the mint matches one of the realm mints too

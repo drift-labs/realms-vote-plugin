@@ -11,17 +11,6 @@ pub mod tools;
 
 declare_id!("H5cjESgwpXoTf7szHBch17noet6DdTFCrMgHcTro5cLb");
 
-#[macro_export]
-macro_rules! load {
-    ($account_loader:expr) => {{
-        $account_loader.load().map_err(|_| {
-            let error_code = ErrorCode::UnableToLoadAccountLoader;
-            msg!("Error {} thrown at {}:{}", error_code, file!(), line!());
-            error_code
-        })
-    }};
-}
-
 #[program]
 pub mod drift_stake_voter {
 

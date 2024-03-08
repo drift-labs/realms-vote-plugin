@@ -48,6 +48,7 @@ pub struct UpdateVoterWeightRecord<'info> {
     #[account(
         mut,
         constraint = insurance_fund_stake.load()?.authority == voter_weight_record.governing_token_owner.key(),
+        constraint = insurance_fund_stake.load()?.market_index == registrar.spot_market_index,
         // check that this is owned by the drift program specified by the registrar
     )]
     pub insurance_fund_stake: AccountLoader<'info, InsuranceFundStake>,
@@ -59,7 +60,7 @@ pub fn update_voter_weight_record(ctx: Context<UpdateVoterWeightRecord>) -> Resu
     let insurance_fund_stake = &mut ctx.accounts.insurance_fund_stake.load_mut()?;
 
 
-    let bingbong = get_user_token_stake(
+    let weight = get_user_token_stake(
         insurance_fund_stake,
         ctx.accounts.spot_market.load()?.deref(),
         ctx.accounts.insurance_fund_vault.amount,
@@ -67,7 +68,7 @@ pub fn update_voter_weight_record(ctx: Context<UpdateVoterWeightRecord>) -> Resu
     )?;
 
     // Setup voter_weight
-    voter_weight_record.voter_weight = bingbong;
+    voter_weight_record.voter_weight = weight;
 
     // Record is only valid as of the current slot
     voter_weight_record.voter_weight_expiry = Some(Clock::get()?.slot);
