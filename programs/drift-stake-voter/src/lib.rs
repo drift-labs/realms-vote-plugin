@@ -18,10 +18,10 @@ pub mod drift_stake_voter {
 
     pub fn create_registrar(
         ctx: Context<CreateRegistrar>,
-        max_governance_programs: u8,
+        spot_market_index: u16,
     ) -> Result<()> {
         log_version();
-        instructions::create_registrar(ctx, max_governance_programs)
+        instructions::create_registrar(ctx, spot_market_index)
     }
     pub fn create_voter_weight_record(
         ctx: Context<CreateVoterWeightRecord>,
