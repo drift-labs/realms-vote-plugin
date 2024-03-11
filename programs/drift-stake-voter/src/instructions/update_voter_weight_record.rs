@@ -1,4 +1,4 @@
-use crate::error::RealmVoterError;
+use crate::error::DriftVoterError;
 use crate::state::*;
 use crate::tools::drift_tools::get_user_token_stake;
 use anchor_lang::prelude::*;
@@ -25,10 +25,10 @@ pub struct UpdateVoterWeightRecord<'info> {
     #[account(
         mut,
         constraint = voter_weight_record.realm == registrar.realm
-        @ RealmVoterError::InvalidVoterWeightRecordRealm,
+        @ DriftVoterError::InvalidVoterWeightRecordRealm,
 
         constraint = voter_weight_record.governing_token_mint == registrar.governing_token_mint
-        @ RealmVoterError::InvalidVoterWeightRecordMint,
+        @ DriftVoterError::InvalidVoterWeightRecordMint,
     )]
     pub voter_weight_record: Account<'info, VoterWeightRecord>,
 
@@ -68,8 +68,16 @@ pub fn update_voter_weight_record(ctx: Context<UpdateVoterWeightRecord>) -> Resu
         &token_owner_record.clone(),
         &registrar.realm,
         &registrar.governing_token_mint,
+    ).unwrap();
+
+    // Ensure that the correct governance token is used
+    require_eq!(
+        voter_weight_record.governing_token_owner,
+        record.governing_token_owner,
+        DriftVoterError::GoverningTokenOwnerMustMatch
     );
-    let spl_gov_deposit_weight = record.unwrap().governing_token_deposit_amount;
+
+    let spl_gov_deposit_weight = record.governing_token_deposit_amount;
     msg!("SPL-GOV weight: {}", spl_gov_deposit_weight);
 
     // Get drift insurance pool deposit weight

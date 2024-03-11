@@ -1,4 +1,4 @@
-use gpl_realm_voter::error::RealmVoterError;
+use gpl_realm_voter::error::DriftVoterError;
 use gpl_realm_voter::state::CollectionItemChangeType;
 use program_test::realm_voter_test::RealmVoterTest;
 use program_test::tools::*;
@@ -99,7 +99,7 @@ async fn test_configure_voter_weights_with_invalid_realm_error() -> Result<(), T
 
     // Assert
 
-    assert_realm_voter_err(err, RealmVoterError::InvalidRealmForRegistrar);
+    assert_realm_voter_err(err, DriftVoterError::InvalidRealmForRegistrar);
 
     Ok(())
 }
@@ -171,7 +171,7 @@ async fn test_configure_voter_weights_with_invalid_realm_authority_error(
 
     // Assert
 
-    assert_realm_voter_err(err, RealmVoterError::InvalidRealmAuthority);
+    assert_realm_voter_err(err, DriftVoterError::InvalidRealmAuthority);
 
     Ok(())
 }
