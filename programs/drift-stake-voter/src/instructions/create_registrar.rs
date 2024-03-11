@@ -1,4 +1,4 @@
-use crate::error::DriftVoterError;
+use crate::error::RealmVoterError;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_spl::token::Mint;
@@ -84,7 +84,7 @@ pub fn create_registrar(ctx: Context<CreateRegistrar>, spot_market_index: u16) -
     require_eq!(
         realm.authority.unwrap(),
         ctx.accounts.realm_authority.key(),
-        DriftVoterError::InvalidRealmAuthority
+        RealmVoterError::InvalidRealmAuthority
     );
 
     Ok(())
