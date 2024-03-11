@@ -1,7 +1,6 @@
 use anchor_lang::prelude::*;
 use drift::{
-    math::insurance::if_shares_to_vault_amount,
-    state::insurance_fund_stake::InsuranceFundStake,
+    math::insurance::if_shares_to_vault_amount, state::insurance_fund_stake::InsuranceFundStake,
     state::spot_market::SpotMarket,
 };
 
@@ -22,7 +21,7 @@ pub fn get_user_token_stake(
         msg!("insurance_fund_stake.last_withdraw_request_shares != 0");
         return Ok(0);
     }
-/* 
+    /*
     // insurance fund must be configured with sufficiently unstaking_period
     if spot_market.insurance_fund.unstaking_period < 100 {
         return Ok(0);

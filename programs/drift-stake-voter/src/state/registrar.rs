@@ -31,13 +31,11 @@ pub struct Registrar {
     pub drift_program_id: Pubkey,
     // Index of the spot_market used for pricing the governing token
     pub spot_market_index: u16,
-
 }
 
 impl Registrar {
     pub fn get_space() -> usize {
-        DISCRIMINATOR_SIZE
-            + PUBKEY_BYTES * 4 + 2
+        DISCRIMINATOR_SIZE + PUBKEY_BYTES * 4 + 2
     }
 }
 
