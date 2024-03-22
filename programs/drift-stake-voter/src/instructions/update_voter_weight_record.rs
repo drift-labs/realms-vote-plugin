@@ -94,8 +94,8 @@ pub fn update_voter_weight_record(ctx: Context<UpdateVoterWeightRecord>) -> Resu
             ctx.accounts.spot_market.load()?.deref(),
             ctx.accounts.insurance_fund_vault.amount,
             Clock::get()?.unix_timestamp,
-        )?, // if `my_option` is `Some`, unwrap it and get the value
-        None => 0, // if `my_option` is `None`, default to 0
+        )?, 
+        None => 0, 
     };
 
 
