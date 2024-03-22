@@ -18,7 +18,11 @@ use std::ops::Deref;
 pub struct UpdateVoterWeightRecord<'info> {
     #[account(
         constraint = registrar.drift_program_id == drift_program.key(),
-        seeds = [b"registrar".as_ref(), voter_weight_record.realm.key().as_ref(), voter_weight_record.governing_token_mint.key().as_ref()],
+        seeds = [
+            b"registrar".as_ref(),
+            voter_weight_record.realm.key().as_ref(),
+            voter_weight_record.governing_token_mint.key().as_ref()
+        ],
         bump
     )]
     pub registrar: Account<'info, Registrar>,
@@ -71,7 +75,8 @@ pub fn update_voter_weight_record(ctx: Context<UpdateVoterWeightRecord>) -> Resu
         &token_owner_record.clone(),
         &registrar.realm,
         &registrar.governing_token_mint,
-    ).unwrap();
+    )
+    .unwrap();
 
     // Ensure that the token owner record belongs to the same governing token owner
     require_eq!(

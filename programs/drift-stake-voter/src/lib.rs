@@ -16,10 +16,7 @@ pub mod drift_stake_voter {
 
     use super::*;
 
-    pub fn create_registrar(
-        ctx: Context<CreateRegistrar>,
-        spot_market_index: u16,
-    ) -> Result<()> {
+    pub fn create_registrar(ctx: Context<CreateRegistrar>, spot_market_index: u16) -> Result<()> {
         log_version();
         instructions::create_registrar(ctx, spot_market_index)
     }
@@ -34,7 +31,6 @@ pub mod drift_stake_voter {
         log_version();
         instructions::update_voter_weight_record(ctx)
     }
-
 }
 
 fn log_version() {

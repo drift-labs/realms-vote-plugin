@@ -4,13 +4,10 @@ use anchor_lang::prelude::*;
 use anchor_spl::token::Mint;
 use spl_governance::state::realm;
 
-/// Creates Registrar storing Realm Voter configuration for spl-governance Realm
-/// This instruction should only be executed once per realm/governing_token_mint to create the account
 #[derive(Accounts)]
-#[instruction(max_governance_programs: u8)]
+#[instruction(spot_market_index: u16)]
 pub struct CreateRegistrar<'info> {
-    /// The Realm Voter Registrar
-    /// There can only be a single registrar per governance Realm and governing mint of the Realm
+    /// There can only be a single registrar per Realm and governing mint of the Realm
     #[account(
         init,
         seeds = [b"registrar".as_ref(),realm.key().as_ref(), governing_token_mint.key().as_ref()],
@@ -25,8 +22,7 @@ pub struct CreateRegistrar<'info> {
     #[account(executable)]
     pub governance_program_id: UncheckedAccount<'info>,
 
-    /// The program id of the spl-governance program the realm belongs to
-    /// CHECK: Can be any instance of spl-governance and it's not known at the compilation time
+    /// CHECK: Can be any instance of drift and it's not known at the compilation time
     #[account(executable)]
     pub drift_program_id: UncheckedAccount<'info>,
 
@@ -56,13 +52,6 @@ pub struct CreateRegistrar<'info> {
     pub system_program: Program<'info, System>,
 }
 
-/// Creates a new Registrar which stores Realms voter configuration for the given Realm
-///
-/// To use the registrar, call ConfigureGovernanceProgram to register spl-governance instance which will be
-/// used for governance
-///
-/// max_governance_programs is used to allocate account size for the maximum number of configured spl-governance instances
-/// Note: Once Solana runtime supports account resizing the max value won't be required
 pub fn create_registrar(ctx: Context<CreateRegistrar>, spot_market_index: u16) -> Result<()> {
     let registrar = &mut ctx.accounts.registrar;
     **registrar = Registrar {
