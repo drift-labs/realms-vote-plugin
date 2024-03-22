@@ -16,9 +16,10 @@ use std::ops::Deref;
 /// and must be executed inside the same transaction as the corresponding spl-gov instruction
 #[derive(Accounts)]
 pub struct UpdateVoterWeightRecord<'info> {
-    /// The RealmVoter voting Registrar
     #[account(
         constraint = registrar.drift_program_id == drift_program.key(),
+        seeds = [b"registrar".as_ref(), voter_weight_record.realm.key().as_ref(), voter_weight_record.governing_token_mint.key().as_ref()],
+        bump
     )]
     pub registrar: Account<'info, Registrar>,
 
@@ -29,6 +30,7 @@ pub struct UpdateVoterWeightRecord<'info> {
 
         constraint = voter_weight_record.governing_token_mint == registrar.governing_token_mint
         @ DriftVoterError::InvalidVoterWeightRecordMint,
+        // can't do a seeds constraint here because we don't yet know the token_owner_record governing_token_owner
     )]
     pub voter_weight_record: Account<'info, VoterWeightRecord>,
 
@@ -63,6 +65,7 @@ pub fn update_voter_weight_record(ctx: Context<UpdateVoterWeightRecord>) -> Resu
     let token_owner_record = ctx.accounts.token_owner_record.to_account_info();
     let registrar = &ctx.accounts.registrar;
 
+    // this also performs checks that the token owner record uses the right mint, realm, and program
     let record = get_token_owner_record_data_for_realm_and_governing_mint(
         &registrar.governance_program_id,
         &token_owner_record.clone(),
@@ -70,7 +73,7 @@ pub fn update_voter_weight_record(ctx: Context<UpdateVoterWeightRecord>) -> Resu
         &registrar.governing_token_mint,
     ).unwrap();
 
-    // Ensure that the correct governance token is used
+    // Ensure that the token owner record belongs to the same governing token owner
     require_eq!(
         voter_weight_record.governing_token_owner,
         record.governing_token_owner,
