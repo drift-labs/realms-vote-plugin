@@ -1,5 +1,5 @@
 use anchor_lang::prelude::ERROR_CODE_OFFSET;
-use gpl_realm_voter::error::RealmVoterError;
+use gpl_realm_voter::error::DriftVoterError;
 use solana_program::instruction::InstructionError;
 use solana_sdk::{signature::Keypair, transaction::TransactionError, transport::TransportError};
 use spl_governance_tools::error::GovernanceToolsError;
@@ -15,7 +15,7 @@ pub fn NopOverride<T>(_: &mut T) {}
 #[allow(dead_code)]
 pub fn assert_realm_voter_err(
     banks_client_error: TransportError,
-    realm_voter_error: RealmVoterError,
+    realm_voter_error: DriftVoterError,
 ) {
     let tx_error = banks_client_error.unwrap();
 

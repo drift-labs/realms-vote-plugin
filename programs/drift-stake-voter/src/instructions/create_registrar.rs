@@ -1,4 +1,4 @@
-use crate::error::RealmVoterError;
+use crate::error::DriftVoterError;
 use crate::state::*;
 use anchor_lang::prelude::*;
 use anchor_spl::token::Mint;
@@ -54,8 +54,6 @@ pub struct CreateRegistrar<'info> {
     pub payer: Signer<'info>,
 
     pub system_program: Program<'info, System>,
-
-
 }
 
 /// Creates a new Registrar which stores Realms voter configuration for the given Realm
@@ -72,7 +70,7 @@ pub fn create_registrar(ctx: Context<CreateRegistrar>, spot_market_index: u16) -
         realm: ctx.accounts.realm.key(),
         governing_token_mint: ctx.accounts.governing_token_mint.key(),
         spot_market_index: spot_market_index,
-        drift_program_id: ctx.accounts.drift_program_id.key(), 
+        drift_program_id: ctx.accounts.drift_program_id.key(),
     };
 
     // Verify that realm_authority is the expected authority of the Realm
@@ -86,7 +84,7 @@ pub fn create_registrar(ctx: Context<CreateRegistrar>, spot_market_index: u16) -
     require_eq!(
         realm.authority.unwrap(),
         ctx.accounts.realm_authority.key(),
-        RealmVoterError::InvalidRealmAuthority
+        DriftVoterError::InvalidRealmAuthority
     );
 
     Ok(())

@@ -3,7 +3,7 @@ use anchor_lang::prelude::*;
 use drift::error::ErrorCode as DriftErrorCode;
 
 #[error_code]
-pub enum RealmVoterError {
+pub enum DriftVoterError {
     #[msg("Invalid Realm Authority")]
     InvalidRealmAuthority,
 
@@ -29,8 +29,8 @@ pub enum RealmVoterError {
     DriftError,
 }
 
-impl From<DriftErrorCode> for RealmVoterError {
+impl From<DriftErrorCode> for DriftVoterError {
     fn from(_: DriftErrorCode) -> Self {
-        RealmVoterError::DriftError
+        DriftVoterError::DriftError
     }
 }
