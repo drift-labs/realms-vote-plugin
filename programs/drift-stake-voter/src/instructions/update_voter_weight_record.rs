@@ -57,7 +57,7 @@ pub struct UpdateVoterWeightRecord<'info> {
         constraint = insurance_fund_stake.load()?.market_index == registrar.spot_market_index,
         // check that this is owned by the drift program specified by the registrar
     )]
-    pub insurance_fund_stake: AccountLoader<'info, InsuranceFundStake>,
+    pub insurance_fund_stake: Option<AccountLoader<'info, InsuranceFundStake>>,
     pub drift_program: Program<'info, Drift>,
 }
 
@@ -88,13 +88,16 @@ pub fn update_voter_weight_record(ctx: Context<UpdateVoterWeightRecord>) -> Resu
     let spl_gov_deposit_weight = record.governing_token_deposit_amount;
     msg!("SPL-GOV weight: {}", spl_gov_deposit_weight);
 
-    // Get drift insurance pool deposit weight
-    let drift_stake_weight = get_user_token_stake(
-        ctx.accounts.insurance_fund_stake.load()?.deref(),
-        ctx.accounts.spot_market.load()?.deref(),
-        ctx.accounts.insurance_fund_vault.amount,
-        Clock::get()?.unix_timestamp,
-    )?;
+    let drift_stake_weight = match &ctx.accounts.insurance_fund_stake {
+        Some(insurance_fund_stake) => get_user_token_stake(
+            insurance_fund_stake.load()?.deref(),
+            ctx.accounts.spot_market.load()?.deref(),
+            ctx.accounts.insurance_fund_vault.amount,
+            Clock::get()?.unix_timestamp,
+        )?, // if `my_option` is `Some`, unwrap it and get the value
+        None => 0, // if `my_option` is `None`, default to 0
+    };
+
 
     msg!("Drift stake weight: {}", drift_stake_weight);
 
