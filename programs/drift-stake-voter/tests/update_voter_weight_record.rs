@@ -1,5 +1,5 @@
 use crate::program_test::realm_voter_test::RealmVoterTest;
-use gpl_realm_voter::{error::DriftVoterError, state::CollectionItemChangeType};
+use drift_stake_voter::{error::DriftVoterError, state::CollectionItemChangeType};
 use program_test::tools::*;
 use solana_program_test::*;
 use solana_sdk::transport::TransportError;
