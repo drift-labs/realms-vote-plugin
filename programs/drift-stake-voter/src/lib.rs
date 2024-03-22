@@ -30,10 +30,6 @@ pub mod drift_stake_voter {
         log_version();
         instructions::create_voter_weight_record(ctx, governing_token_owner)
     }
-    pub fn create_max_voter_weight_record(ctx: Context<CreateMaxVoterWeightRecord>) -> Result<()> {
-        log_version();
-        instructions::create_max_voter_weight_record(ctx)
-    }
     pub fn update_voter_weight_record(ctx: Context<UpdateVoterWeightRecord>) -> Result<()> {
         log_version();
         instructions::update_voter_weight_record(ctx)
