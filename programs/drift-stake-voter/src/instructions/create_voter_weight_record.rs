@@ -8,14 +8,7 @@ use anchor_lang::prelude::*;
 #[instruction(governing_token_owner: Pubkey)]
 pub struct CreateVoterWeightRecord<'info> {
     // The Registrar the VoterWeightRecord account belongs to
-    #[account(
-        seeds = [
-            b"registrar".as_ref(),
-            voter_weight_record.realm.key().as_ref(),
-            voter_weight_record.governing_token_mint.key().as_ref()
-        ],
-        bump
-    )]
+    #[account()]
     pub registrar: Account<'info, Registrar>,
 
     #[account(
