@@ -5,10 +5,10 @@ seeds = false
 skip-lint = false
 
 [programs.localnet]
-drift-stake-voter = "H5cjESgwpXoTf7szHBch17noet6DdTFCrMgHcTro5cLb"
+drift-stake-voter = "dVoTE1AJqkZVoE1mPbWcqYPmEEvAUBksHY2NiM2UJQe"
 
 [programs.devnet]
-drift-stake-voter = "H5cjESgwpXoTf7szHBch17noet6DdTFCrMgHcTro5cLb"
+drift-stake-voter = "dVoTE1AJqkZVoE1mPbWcqYPmEEvAUBksHY2NiM2UJQe"
 
 [registry]
 url = "https://api.apr.dev"

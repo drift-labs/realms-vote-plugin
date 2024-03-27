@@ -9,7 +9,7 @@ pub mod state;
 
 pub mod tools;
 
-declare_id!("H5cjESgwpXoTf7szHBch17noet6DdTFCrMgHcTro5cLb");
+declare_id!("dVoTE1AJqkZVoE1mPbWcqYPmEEvAUBksHY2NiM2UJQe");
 
 #[program]
 pub mod drift_stake_voter {
