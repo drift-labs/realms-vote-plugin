@@ -14,8 +14,8 @@ drift-stake-voter = "dVoTE1AJqkZVoE1mPbWcqYPmEEvAUBksHY2NiM2UJQe"
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Devnet"
-wallet = "./admin.json"
+cluster = "Mainnet"
+wallet = "./deployer.json"
 
 [scripts]
 test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
