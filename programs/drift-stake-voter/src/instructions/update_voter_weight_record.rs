@@ -47,11 +47,11 @@ pub struct UpdateVoterWeightRecord<'info> {
         constraint = spot_market.load()?.market_index == registrar.spot_market_index,
         constraint = spot_market.load()?.mint == registrar.governing_token_mint,
     )]
-    pub spot_market: AccountLoader<'info, SpotMarket>,
+    pub spot_market: Option<AccountLoader<'info, SpotMarket>>,
     #[account(
-        constraint = spot_market.load()?.insurance_fund.vault == insurance_fund_vault.key(),
+        constraint = spot_market.as_ref().unwrap().load()?.insurance_fund.vault == insurance_fund_vault.key(),
     )]
-    pub insurance_fund_vault: Account<'info, TokenAccount>,
+    pub insurance_fund_vault: Option<Account<'info, TokenAccount>>,
     #[account(
         constraint = insurance_fund_stake.load()?.authority == voter_weight_record.governing_token_owner.key(),
         constraint = insurance_fund_stake.load()?.market_index == registrar.spot_market_index,
@@ -88,14 +88,17 @@ pub fn update_voter_weight_record(ctx: Context<UpdateVoterWeightRecord>) -> Resu
     let spl_gov_deposit_weight = record.governing_token_deposit_amount;
     msg!("SPL-GOV weight: {}", spl_gov_deposit_weight);
 
-    let drift_stake_weight = match &ctx.accounts.insurance_fund_stake {
-        Some(insurance_fund_stake) => get_user_token_stake(
+    let drift_stake_weight = match (&ctx.accounts.insurance_fund_stake, &ctx.accounts.spot_market, &ctx.accounts.insurance_fund_vault) {
+        (Some(insurance_fund_stake), Some(spot_market), Some(insurance_fund_vault)) => get_user_token_stake(
             insurance_fund_stake.load()?.deref(),
-            ctx.accounts.spot_market.load()?.deref(),
-            ctx.accounts.insurance_fund_vault.amount,
+            spot_market.load()?.deref(),
+            insurance_fund_vault.amount,
             Clock::get()?.unix_timestamp,
         )?, 
-        None => 0, 
+        _ => {
+            msg!("insurance fund stake, spot market and/or insurance fund vault not found");
+            0
+        },
     };
 
 
