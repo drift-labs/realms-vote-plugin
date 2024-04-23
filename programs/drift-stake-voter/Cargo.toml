@@ -1,6 +1,6 @@
 [package]
 name = "drift-stake-voter"
-version = "0.0.1"
+version = "0.0.2"
 description = "SPL Governance plugin granting governance power through Drift staking"
 edition = "2021"
 
