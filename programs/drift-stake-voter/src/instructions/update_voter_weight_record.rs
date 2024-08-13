@@ -104,7 +104,8 @@ pub fn update_voter_weight_record(ctx: Context<UpdateVoterWeightRecord>) -> Resu
 
     msg!("Drift stake weight: {}", drift_stake_weight);
 
-    let total_weight = spl_gov_deposit_weight.saturating_add(drift_stake_weight);
+    // drift stake gets 2x voting power
+    let total_weight = spl_gov_deposit_weight.saturating_add(drift_stake_weight.saturating_add(drift_stake_weight));
     msg!("Total weight: {}", total_weight);
 
     // Setup voter_weight
