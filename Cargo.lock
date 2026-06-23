@@ -1079,7 +1079,7 @@ dependencies = [
 [[package]]
 name = "drift"
 version = "2.40.0"
-source = "git+https://github.com/drift-labs/protocol-v2.git?rev=65a4386#65a4386bd8d0b72d3f32d604788174b19413f48e"
+source = "git+https://github.com/velocity-exchange/protocol-v2.git?rev=65a4386#65a4386bd8d0b72d3f32d604788174b19413f48e"
 dependencies = [
  "anchor-lang",
  "anchor-spl",
@@ -2498,7 +2498,7 @@ dependencies = [
 [[package]]
 name = "phoenix-v1"
 version = "0.2.4"
-source = "git+https://github.com/drift-labs/phoenix-v1?rev=4c65c9#4c65c97cd62493e27425ea2830447c833152bed1"
+source = "git+https://github.com/velocity-exchange/phoenix-v1?rev=4c65c9#4c65c97cd62493e27425ea2830447c833152bed1"
 dependencies = [
  "borsh",
  "bytemuck",
